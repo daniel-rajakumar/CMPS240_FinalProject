@@ -2,13 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Creating DataFrame from the data
-sales_data = pd.read_csv("https://raw.githubusercontent.com/daniel-rajakumar/CMPS240_FinalProject/main/iPhone.csv")
+sales_data = pd.read_csv("https://raw.githubusercontent.com/daniel-rajakumar/CMPS240_FinalProject/main/res/iPhone.csv")
 
 # Set 'Year' column as the index of the DataFrame
 sales_data.set_index('Year', inplace=True)
-
-# Plotting the data
-# plt.figure(figsize=(1, 1))  # Set the figure size
 
 # Plot for each region
 for column in sales_data.columns:
