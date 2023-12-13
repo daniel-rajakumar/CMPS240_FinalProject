@@ -1,80 +1,51 @@
-# import pandas as pd
-# import matplotlib.pyplot as plt
-
-# # Creating DataFrame from the cvs data
-# sales_data = pd.read_csv("https://raw.githubusercontent.com/daniel-rajakumar/CMPS240_FinalProject/main/res/iPhone.csv")
-
-# # Set 'Year' column as the index of the DataFrame
-# sales_data.set_index('Year', inplace=True)
-
-# # Plot for each region
-# for column in sales_data.columns:
-#     plt.plot(sales_data.index, sales_data[column], label=column)
-
-#   # Calculate growth rate for each region
-# growth_data = sales_data.pct_change() * 100  # Calculate percentage change as growth rate
-
-
-# # Set plot labels and title
-# plt.xlabel('Year')
-# plt.ylabel('iPhone Sales')
-# plt.title('iPhone Sales in Different Regions Over 5 Years')
-# plt.legend()  # Show legend
-
-# # Show plot
-# plt.grid(True)  # Add gridlines
-# plt.tight_layout()  # Adjust layout
-# plt.show()
-
-
-
-
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Creating sample sales data (Replace this with your actual data)
-data = {
-    'Year': [2019, 2020, 2021, 2022, 2023],
-    'Region_A': [5000, 6000, 7000, 8000, 7500],
-    'Region_B': [4500, 5500, 6500, 7500, 7000],
-    'Region_C': [4000, 5000, 6000, 7000, 6500]
-}
+# get data from url
+data_url = "https://raw.githubusercontent.com/daniel-rajakumar/CMPS240_FinalProject/main/res/iPhone.csv"
+sales_data = pd.read_csv(data_url)
 
-# Creating DataFrame from the data
-# sales_data = pd.DataFrame(data)
-
-sales_data = pd.read_csv("https://raw.githubusercontent.com/daniel-rajakumar/CMPS240_FinalProject/main/res/iPhone.csv")
-
-# Set 'Year' column as the index of the DataFrame
+# make year as Y-axis
 sales_data.set_index('Year', inplace=True)
 
-# Calculate growth rate for each region
-growth_data = sales_data.pct_change() * 100  # Calculate percentage change as growth rate
+# growth rate
+sales_data_growth = sales_data.pct_change() * 100  # Calculate percentage change
 
-# Plotting the data and growth rate
-fig, ax1 = plt.subplots(figsize=(10, 6))  # Set the figure size
+#######################
+###### Plotting ######
+######################
 
-# Plot for each region
+fig, ax1 = plt.subplots(figsize=(10, 6))  # Create a figure and axes
+ax2 = ax1.twinx()  # Create a second y-axis sharing the same x-axis
+
+# set up plot for sale
 for column in sales_data.columns:
-    ax1.plot(sales_data.index, sales_data[column], label=f'{column} Sales')
+    ax1.plot(sales_data.index, sales_data[column], label=f'{column} Sales', linestyle='-', marker='o')
 
-ax2 = ax1.twinx()  # Create a second y-axis for growth rate
-for column in growth_data.columns:
-    ax2.plot(growth_data.index, growth_data[column], linestyle='--', label=f'{column} Growth Rate')
+# set up plot for growth rage
+for column in sales_data_growth.columns:
+    ax2.plot(sales_data_growth.index, sales_data_growth[column], label=f'{column} Growth Rate', linestyle='--', marker='x')
 
-# Set plot labels and title
+# Set labels and title for the plot
 ax1.set_xlabel('Year')
 ax1.set_ylabel('iPhone Sales')
 ax2.set_ylabel('Growth Rate (%)')
-plt.title('iPhone Sales and Growth Rate in Different Regions Over 5 Years')
-fig.tight_layout()
+ax1.set_title('iPhone Sales and Growth Rate in Different Regions Over Time')
 
-# Combine legends from both axes
-lines_1, labels_1 = ax1.get_legend_handles_labels()
-lines_2, labels_2 = ax2.get_legend_handles_labels()
-ax2.legend(lines_1 + lines_2, labels_1 + labels_2, loc='upper right')
+# Show legends
+lines1, labels1 = ax1.get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+ax1.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
 
-# Show plot
-plt.grid(True)  # Add gridlines
+note_text = "Average Growth Rate for Each Region:"
+for region, growth_rate in sales_data_growth.items():
+    note_text += f"\n{region}: {growth_rate.mean():.2}%"
+
+plt.annotate(note_text, xy=(0.5, -0.3), xycoords='axes fraction', ha='center', fontsize=10, color='gray', wrap=True)
+
+
+# Display the plot
+plt.grid(True)
+plt.tight_layout()
 plt.show()
 
