@@ -9,7 +9,7 @@ sales_data = pd.read_csv(url)
 regions = sales_data.columns[1:]  # remove Year
 growth_data = pd.DataFrame()  
 for region in regions:
-    growth_data[f'{region}_Growth'] = sales_data[region].pct_change() * 100
+    growth_data[region] = sales_data[region].pct_change() * 100
 
 # set 'Year' column as index
 sales_data.set_index('Year', inplace=True)
@@ -37,7 +37,7 @@ plt.ylabel('Growth Rate (%)')
 # add avg growth rate (%) for each region on bottom of growth graph
 note_text = "Average Growth Rate for Each Region:"
 for region, sales_rate in growth_data.items():
-    note_text += f"\n{region}: {sales_rate.mean():.3}%"
+    note_text += f"\n{region.replace(' ', ' ')}: {sales_rate.mean():.3}%"
 plt.annotate(note_text, xy=(0.5, -0.3), xycoords='axes fraction', ha='center', fontsize=10, color='gray', wrap=True)
 
 
